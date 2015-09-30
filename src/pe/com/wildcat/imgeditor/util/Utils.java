@@ -69,10 +69,10 @@ public class Utils {
     
     /*
     public static void main( String []args){
-        System.out.println(drawLine(0, 0, 10, 20));
-        System.out.println(drawLine(10, 20, 20, 5));
-        System.out.println(drawLine(10, 20, 2, 30));
-        System.out.println(drawLine(10, 20, 2, 3));
+        System.out.println(drawLine(25, 50, 25, 80));
+        System.out.println(drawLine(10, 20, 30, 500));
+        System.out.println(drawLine(160, 50, 100, 500));
+        System.out.println(drawLine(500, 30, 50, 60));
     }*/
     
     public static List<Pixel> drawLine(int x1, int y1, int x2, int y2){
@@ -98,9 +98,11 @@ public class Utils {
         }
        System.out.println("pendiente: " + pendiente+" X "+ xmax + " " + xmin  + " Y " + ymax + " " + ymin );
         List<Pixel> listPixel = new ArrayList<Pixel>();
-        if(pendiente <= 1){
+        if(pendiente <= 1 && pendiente >= -1){
             for(int i = xmin; i<=xmax; i++){
-                int valright = Math.round(pendiente*(i - x2)) + y2; 
+                int valright = Math.round(pendiente*(i - x2)) + y2;
+                listPixel.add(new Pixel(Color.YELLOW.getRGB(), i, valright));
+                /*
                 for(int j = ymin; j<=ymax; j++){
                     //Se cumple la condicion por lo tanto el pixel pertenece a la recta
                     //if((j - y2) == Math.round(pendiente*(i - x2))){
@@ -108,11 +110,13 @@ public class Utils {
                         listPixel.add(new Pixel(Color.YELLOW.getRGB(), i, j));                    
                         break;
                     }
-                }
+                }*/
             }
         }else{
             for(int j = ymin; j<=ymax; j++){
                 int valright = Math.round((j - y2)/pendiente) + x2; 
+                listPixel.add(new Pixel(Color.YELLOW.getRGB(), valright, j));
+                /*
                 for(int i = xmin; i<=xmax; i++){
                     //Se cumple la condicion por lo tanto el pixel pertenece a la recta
                     //if((j - y2) == Math.round(pendiente*(i - x2))){
@@ -120,7 +124,7 @@ public class Utils {
                         listPixel.add(new Pixel(Color.YELLOW.getRGB(), i, j));                    
                         break;
                     }
-                }
+                }*/
             }
         }
         if(x1 == listPixel.get(0).getX()){
@@ -136,7 +140,7 @@ public class Utils {
     public static Pixel getPixel1(BufferedImage bufferedImage){
         for(int x=0; x<bufferedImage.getWidth(); x++){
             for(int y=0; y<bufferedImage.getHeight(); y++){
-                if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x, y)){
+                if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x, y)){
                     System.out.println("X: " + x +" Y: " + y);
                     return new Pixel(bufferedImage.getRGB(x, y), x, y);
                 }
@@ -148,7 +152,7 @@ public class Utils {
     public static Pixel getPixel4(BufferedImage bufferedImage){
         for(int x=bufferedImage.getWidth()-1; x>0; x--){
             for(int y=bufferedImage.getHeight()-1; y>0; y--){
-                if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x, y)){
+                if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x, y)){
                     System.out.println("X: " + x +" Y: " + y);
                     return new Pixel(bufferedImage.getRGB(x, y), x, y);
                 }
@@ -161,14 +165,14 @@ public class Utils {
         List<Pixel> listPixels = new ArrayList<Pixel>();
         for(int x=1; x<bufferedImage.getWidth(); x++){
             for(int y=1; y<bufferedImage.getHeight(); y++){
-                if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x, y)){
+                if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x, y)){
                     if(isEsquina(bufferedImage, x,y)){
                         listPixels.add(new Pixel(bufferedImage.getRGB(x, y), x, y));
                     }
                 }
             }            
         }
-        
+        /*
         PrintWriter writer = null;
 
         try {
@@ -184,7 +188,7 @@ public class Utils {
           ex.printStackTrace();
         } finally {
            try {writer.close();} catch (Exception ex) {}
-        }
+        }*/
         return listPixels;
     }
     
@@ -195,26 +199,26 @@ public class Utils {
         int pixel3 = 0;
         int pixel4 = 0;*/
         
-        if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x-1, y)){            
-            if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x+1, y)){
+        if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x-1, y)){            
+            if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x+1, y)){
                 return false;
             }          
         }
         
-        if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x-1, y-1)){
-            if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x+1, y+1)){
+        if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x-1, y-1)){
+            if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x+1, y+1)){
                 return false;
             }
         }
         
-        if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x, y-1)){
-            if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x, y+1)){
+        if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x, y-1)){
+            if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x, y+1)){
                 return false;
             }
         }
         
-        if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x+1, y-1)){
-            if(Constantes.PIXEL_NEGRO == bufferedImage.getRGB(x-1, y+1)){
+        if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x+1, y-1)){
+            if(Constantes.PIXEL_BLANCO == bufferedImage.getRGB(x-1, y+1)){
                return false;
             }
         }
@@ -230,8 +234,8 @@ public class Utils {
 
         for (int i = 0; i < imgHeight; i++) {
             for (int j = 0; j < imgWidth; j++) {
-                if(Constantes.PIXEL_BLANCO != bufferedImage.getRGB(j, i)){
-                    bufferedImage.setRGB(j, i, Constantes.PIXEL_NEGRO);
+                if(Constantes.PIXEL_NEGRO != bufferedImage.getRGB(j, i)){
+                    bufferedImage.setRGB(j, i, Constantes.PIXEL_BLANCO);
                 }                
             }
         }

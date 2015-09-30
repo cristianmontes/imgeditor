@@ -43,21 +43,37 @@ public class EditorMouseListener extends MouseAdapter{
         System.out.println("X "+ (int) event.getX() + " Y " + (int) event.getY());
         int x = currentX;
         int y = currentY;
+        
+        int xPrev = -1;
+        int yPrev = -1;
         if(x != -1 && y != -1){
-        if(internalFrame.getFigure().get(y).get(x).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y).get(x).getPixel() == Constantes.PIXEL_BLANCO){
             listPixelsFigure = new ArrayList<Pixel>();
             int numitera = 0;
             while(true && numitera<internalFrame.getBufferedImage().getWidth()*internalFrame.getBufferedImage().getHeight()){
                 numitera ++;
-                Pixel pixel = findNextPixel(x,y);
+                Pixel pixel = findNextPixelAntiHorario(x,y);
                 if(pixel != null){
                     listPixelsFigure.add(pixel);
+                    xPrev = x;
+                    yPrev = y;
                     x = pixel.getX();
                     y = pixel.getY();
                 }else{
-                    break;
+                    //System.out.println("Buscando en sentido horario... xPrev "+ xPrev + " yPrev " +yPrev + "x "+ x + " y " +y);
+                    Pixel pixel2 = findNextPixelHorario(xPrev,yPrev);
+                    
+                    System.out.println("Buscando en sentido horario... xPrev "+ xPrev + " yPrev " +yPrev + "x "+ x + " y " +y + "pixel");
+                    if(pixel2 != null){
+                        listPixelsFigure.add(pixel2);
+                        x = pixel2.getX();
+                        y = pixel2.getY();
+                    }else{
+                        break;
+                    }
                 }
             }
+            
             if(listPixelsFigure != null && listPixelsFigure.size() > 0){
                 for(int i=0; i<listPixelsFigure.size(); i++){
                     internalFrame.getBufferedImage().setRGB(listPixelsFigure.get(i).getX(), listPixelsFigure.get(i).getY(), Color.BLUE.getRGB());
@@ -96,44 +112,44 @@ public class EditorMouseListener extends MouseAdapter{
         }
     }
     
-    private Pixel findNextPixel(int x, int y){
+    private Pixel findNextPixelAntiHorario(int x, int y){
         
-        if(internalFrame.getFigure().get(y).get(x-1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y).get(x-1))){
                 return internalFrame.getFigure().get(y).get(x-1);
             }
         }
-        if(internalFrame.getFigure().get(y-1).get(x-1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y-1).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x-1))){
                 return internalFrame.getFigure().get(y-1).get(x-1);
             }
         }
-        if(internalFrame.getFigure().get(y-1).get(x).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y-1).get(x).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x))){
                 return internalFrame.getFigure().get(y-1).get(x);
             }
         }        
-        if(internalFrame.getFigure().get(y-1).get(x+1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y-1).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x+1))){
                 return internalFrame.getFigure().get(y-1).get(x+1);
             }
         }
-        if(internalFrame.getFigure().get(y).get(x+1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y).get(x+1))){
                 return internalFrame.getFigure().get(y).get(x+1);
             }
         }
-        if(internalFrame.getFigure().get(y+1).get(x+1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y+1).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x+1))){
                 return internalFrame.getFigure().get(y+1).get(x+1);
             }
         }
-        if(internalFrame.getFigure().get(y+1).get(x).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y+1).get(x).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x))){
                 return internalFrame.getFigure().get(y+1).get(x);
             }
         }
-        if(internalFrame.getFigure().get(y+1).get(x-1).getPixel() == Constantes.PIXEL_NEGRO){
+        if(internalFrame.getFigure().get(y+1).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
             if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x-1))){
                 return internalFrame.getFigure().get(y+1).get(x-1);
             }
@@ -141,6 +157,129 @@ public class EditorMouseListener extends MouseAdapter{
         return null;
     }
     
+    private Pixel findNextPixelHorario(int x, int y){
+        if(internalFrame.getFigure().get(y+1).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x-1))){
+                return internalFrame.getFigure().get(y+1).get(x-1);
+            }
+        }
+        if(internalFrame.getFigure().get(y+1).get(x).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x))){
+                return internalFrame.getFigure().get(y+1).get(x);
+            }
+        }
+        if(internalFrame.getFigure().get(y+1).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x+1))){
+                return internalFrame.getFigure().get(y+1).get(x+1);
+            }
+        }        
+        if(internalFrame.getFigure().get(y).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y).get(x+1))){
+                return internalFrame.getFigure().get(y).get(x+1);
+            }
+        }
+        if(internalFrame.getFigure().get(y-1).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x+1))){
+                return internalFrame.getFigure().get(y-1).get(x+1);
+            }
+        }
+        if(internalFrame.getFigure().get(y-1).get(x).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x))){
+                return internalFrame.getFigure().get(y-1).get(x);
+            }
+        }
+        if(internalFrame.getFigure().get(y-1).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x-1))){
+                return internalFrame.getFigure().get(y-1).get(x-1);
+            }
+        }
+        
+        return null;
+    }
+    
+    public Pixel findNextPixelNivel2(int x, int y){
+        if(internalFrame.getFigure().get(y).get(x-2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y).get(x-2))){
+                return internalFrame.getFigure().get(y).get(x-2);
+            }
+        }
+        if(internalFrame.getFigure().get(y-1).get(x-2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x-2))){
+                return internalFrame.getFigure().get(y-1).get(x-2);
+            }
+        }
+        if(internalFrame.getFigure().get(y-2).get(x-2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-2).get(x-2))){
+                return internalFrame.getFigure().get(y-2).get(x-2);
+            }
+        }
+        if(internalFrame.getFigure().get(y-2).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-2).get(x-1))){
+                return internalFrame.getFigure().get(y-2).get(x-1);
+            }
+        }
+        if(internalFrame.getFigure().get(y-2).get(x).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-2).get(x))){
+                return internalFrame.getFigure().get(y-2).get(x);
+            }
+        }
+        if(internalFrame.getFigure().get(y-2).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-2).get(x+1))){
+                return internalFrame.getFigure().get(y-2).get(x+1);
+            }
+        }
+        if(internalFrame.getFigure().get(y-2).get(x+2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-2).get(x+2))){
+                return internalFrame.getFigure().get(y-2).get(x+2);
+            }
+        }
+        if(internalFrame.getFigure().get(y-1).get(x+2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y-1).get(x+2))){
+                return internalFrame.getFigure().get(y-1).get(x+2);
+            }
+        }
+        if(internalFrame.getFigure().get(y).get(x+2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y).get(x+2))){
+                return internalFrame.getFigure().get(y).get(x+2);
+            }
+        }
+        if(internalFrame.getFigure().get(y+1).get(x+2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x+2))){
+                return internalFrame.getFigure().get(y+1).get(x+2);
+            }
+        }
+        if(internalFrame.getFigure().get(y+2).get(x+2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+2).get(x+2))){
+                return internalFrame.getFigure().get(y+2).get(x+2);
+            }
+        }
+        if(internalFrame.getFigure().get(y+2).get(x+1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+2).get(x+1))){
+                return internalFrame.getFigure().get(y+2).get(x+1);
+            }
+        }
+        if(internalFrame.getFigure().get(y+2).get(x).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+2).get(x))){
+                return internalFrame.getFigure().get(y+2).get(x);
+            }
+        }
+        if(internalFrame.getFigure().get(y+2).get(x-1).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+2).get(x-1))){
+                return internalFrame.getFigure().get(y+2).get(x-1);
+            }
+        }
+        if(internalFrame.getFigure().get(y+2).get(x-2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+2).get(x-2))){
+                return internalFrame.getFigure().get(y+2).get(x-2);
+            }
+        }
+        if(internalFrame.getFigure().get(y+1).get(x-2).getPixel() == Constantes.PIXEL_BLANCO){
+            if(!listPixelsFigure.contains(internalFrame.getFigure().get(y+1).get(x-2))){
+                return internalFrame.getFigure().get(y+1).get(x-2);
+            }
+        }
+        return null;
+    }
     @Override 
     public void mouseMoved(MouseEvent event) {
         //this.internalFrame.validatePosition(event.getX(), event.getY());
@@ -188,7 +327,7 @@ public class EditorMouseListener extends MouseAdapter{
                 //validar que los rangos no excedan fuera del rango de la figura, para evitar un indexbound exception
                 if(j < internalFrame.getFigure().size()){
                     if(i < internalFrame.getFigure().get(j).size()){
-                        if(Constantes.PIXEL_NEGRO == internalFrame.getFigure().get(j).get(i).getPixel()){                            
+                        if(Constantes.PIXEL_BLANCO == internalFrame.getFigure().get(j).get(i).getPixel()){                            
                             currentX = i;
                             currentY = j;
                             //System.out.println("currentX " + currentX + " currentY " + currentY);

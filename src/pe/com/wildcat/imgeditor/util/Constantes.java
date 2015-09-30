@@ -14,8 +14,8 @@ public class Constantes {
    //public final static int PIXEL_NEGRO = -16777216;
     //public final static int PIXEL_BLANCO = -1;
     
-    public final static int PIXEL_NEGRO = -2763308;
-    public final static int PIXEL_BLANCO = -16777216;
+    public final static int PIXEL_BLANCO = -2763308;
+    public final static int PIXEL_NEGRO = -16777216;
     
     public final static int COMPONENT_TYPE_FIGURE = 1;
     public final static int COMPONENT_TYPE_CONNECTOR = 2;
